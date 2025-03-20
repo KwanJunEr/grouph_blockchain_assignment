@@ -484,9 +484,12 @@ export default function BookConsultation() {
               
               {/* Confirm Button */}
               <div className="mt-6">
-                <button 
+                <button
                   className="w-full bg-gray-900 text-white py-3 rounded hover:bg-gray-800"
-                  onClick={handleConfirmBooking}
+                  onClick={() => {
+                    handleConfirmBooking();
+                    window.location.href = '/booking/receipt';
+                  }}
                 >
                   Confirm Booking
                 </button>
