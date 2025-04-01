@@ -44,7 +44,7 @@ const Permission = () => {
         <div className='flex flex-col'>
             <div className='py-2'>
                 <h1 className='text-2xl font-bold'>Permission Log</h1>
-                <p className='text-xl'>Manage who has access to your data</p>
+                <p className='text-gray-600 py-2'>Manage who has access to your data</p>
             </div>
             <hr className='h-2 w-full'/>
             <div className='mt-10'>

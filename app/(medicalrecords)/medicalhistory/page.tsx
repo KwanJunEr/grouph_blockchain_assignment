@@ -38,8 +38,8 @@ const MedicalHistory = () => {
     <main className="min-h-screen">
       <div className="px-5 py-5 flex flex-col">
         <div className="my-2">
-          <h1 className="text-3xl font-bold tracking-tight">Medical Records</h1>
-          <p className="text-xl py-2">View and Manage your Medical Records </p>
+          <h1 className="text-2xl font-bold">Medical Records</h1>
+          <p className="text-gray-600 py-2">View and Manage your Medical Records </p>
         </div>
         <hr className="my-1 w-full h-6 font-bold"/>
         <div className="mt-2">
