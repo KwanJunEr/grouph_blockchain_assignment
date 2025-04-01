@@ -7,11 +7,15 @@ import { ConnectButton } from "thirdweb/react";
 import { client } from "@/lib/client";
 import { generatePayload, isLoggedIn, login, logout } from "@/actions/login";
 import { sepolia } from "thirdweb/chains";
+import { ChevronDown } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
-
+  const pathName = usePathname();
   // Ensure login state is checked on component mount
   useEffect(() => {
     const checkLogin = async () => {
@@ -32,6 +36,50 @@ const Header = () => {
           <Image src="/Union.png" width={15} height={15} alt="logo" />
           <h2 className="text-xl text-white font-extrabold">HealthSync</h2>
         </div>
+        {loggedIn && (
+            <div className="flex items-center space-x-6 text-[16px]">
+            <Link href="/dashboard" className={`text-sm font-medium transition-colors hover:text-primary ${pathName === '/dashboard' ? 'underline underline-offset-4 ' : ''}`}>
+              Home
+            </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center text-sm font-medium transition-colors hover:text-primary">
+                Medical Records
+                <ChevronDown className="ml-1 h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center">
+                <DropdownMenuItem asChild>
+                  <Link href="//history">Medical Records</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/medical-records/vaccinations">Vaccination Records</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Link href="/booking" className={`text-sm font-medium transition-colors hover:text-primary ${pathName === '/booking' ? 'underline text-underline-offset-2 ' : ''}`}>
+              Appointments
+            </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center text-sm font-medium transition-colors hover:text-primary">
+                Tools
+                <ChevronDown className="ml-1 h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center">
+                <DropdownMenuItem asChild>
+                  <Link href="/tools/insurance">Insurance</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/tools/medicine">Medicine</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/tools/claims">Insurance Claims</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
         <div>
           <ConnectButton
             connectButton={{
