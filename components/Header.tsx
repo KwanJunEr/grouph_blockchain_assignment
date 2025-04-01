@@ -90,6 +90,7 @@ const Header = () => {
             auth={{
               isLoggedIn: async (address) => {
                 console.log("checking if logged in!", { address });
+                localStorage.setItem("userAddress", address);
                 return await isLoggedIn();
               },
               doLogin: async (params) => {
@@ -103,6 +104,7 @@ const Header = () => {
               doLogout: async () => {
                 console.log("logging out!");
                 await logout();
+                localStorage.removeItem("userAddress");
                 setLoggedIn(false);
                 router.push("/");
               },
