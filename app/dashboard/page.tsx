@@ -7,14 +7,17 @@ const Dashboard = async () => {
         redirect("/");
       }
   return (
-    <div className='px-5 mt-5 py-5'>
+    <div className='px-5 py-5'>
+        
         <div className='flex flex-row gap-5'>
             {/*Left Column*/}
-            <div>
-
+            <div className='min-w-[900px] bg-red-50'>
+                dssdfsdf
             </div>
-            <div>
 
+              {/*Left Column*/}
+            <div className='min-w-[570px] bg-red-400'>
+sdfsdfsdsd
             </div>
         </div>
     </div>
