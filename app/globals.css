@@ -20,6 +20,11 @@ body {
     background-size: cover;
     background-position: cover;
   }
+  .headerImage{
+    background-image: url('/headerImage.png');
+    background-size: cover;
+    background-position: cover;
+  }
 }
 
 
