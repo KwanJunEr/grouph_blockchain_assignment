@@ -7,10 +7,17 @@ const Dashboard = async () => {
         redirect("/");
       }
   return (
-    <div className=''>
-    <h1>Logged In Page</h1>
-    <p>You are logged in, so you can see this page!</p>
-  </div>
+    <div className='px-5 mt-5 py-5'>
+        <div className='flex flex-row gap-5'>
+            {/*Left Column*/}
+            <div>
+
+            </div>
+            <div>
+
+            </div>
+        </div>
+    </div>
   )
 }
 
