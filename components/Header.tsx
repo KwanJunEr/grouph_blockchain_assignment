@@ -56,10 +56,10 @@ const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
+{/* 
             <Link href="/booking" className={`text-sm font-medium transition-colors hover:text-primary ${pathName === '/booking' ? 'underline text-underline-offset-2 ' : ''}`}>
               Appointments
-            </Link>
+            </Link> */}
 
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-sm font-medium transition-colors hover:text-primary">
@@ -70,9 +70,9 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link href="/tools/insurance">Insurance</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                   <Link href="/tools/medicine">Medicine</Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem asChild>
                   <Link href="/tools/claims">Insurance Claims</Link>
                 </DropdownMenuItem>
@@ -90,6 +90,7 @@ const Header = () => {
             auth={{
               isLoggedIn: async (address) => {
                 console.log("checking if logged in!", { address });
+                localStorage.setItem("userAddress", address);
                 return await isLoggedIn();
               },
               doLogin: async (params) => {
@@ -103,6 +104,7 @@ const Header = () => {
               doLogout: async () => {
                 console.log("logging out!");
                 await logout();
+                localStorage.removeItem("userAddress");
                 setLoggedIn(false);
                 router.push("/");
               },
