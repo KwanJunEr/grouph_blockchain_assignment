@@ -51,13 +51,38 @@ export default function ProfileModalForm({ open, setOpen }: any) {
     },
   });
 
-  function onSubmit(values: any) {
-    // You would typically send this data to your server
-    console.log(values);
-    alert("Form submitted successfully!");
-    setOpen(false);
-    form.reset();
-  }
+  const onSubmit = async (data: any) => {
+    const userAddress = localStorage.getItem("userAddress");
+
+    if (!userAddress) {
+      console.error("User address not found in localStorage");
+      return;
+    }
+
+    const profileData = {
+      ...data, // other profile fields
+      userAddress, // add user address to profile data
+    };
+    console.log("Profile Data", profileData);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(profileData),
+      });
+      const result = await res.json();
+      if (result.success) {
+        console.log("Profile saved successfully", result.data);
+      } else {
+        console.error("Error:", result.message);
+      }
+    } catch (error) {
+      alert("Error submitting profile.");
+      console.error(error);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -212,7 +237,7 @@ export default function ProfileModalForm({ open, setOpen }: any) {
                   <FormItem>
                     <FormLabel>Chronic Conditions</FormLabel>
                     <FormControl>
-                    <Textarea
+                      <Textarea
                         placeholder="Chronic Conditions"
                         className="resize-none"
                         {...field}
@@ -229,7 +254,7 @@ export default function ProfileModalForm({ open, setOpen }: any) {
                   <FormItem>
                     <FormLabel>Allergies</FormLabel>
                     <FormControl>
-                    <Textarea
+                      <Textarea
                         placeholder="Allergies"
                         className="resize-none"
                         {...field}
@@ -242,12 +267,12 @@ export default function ProfileModalForm({ open, setOpen }: any) {
 
               <FormField
                 control={form.control}
-                name = "medications"
+                name="medications"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Medications</FormLabel>
                     <FormControl>
-                    <Textarea
+                      <Textarea
                         placeholder="Medications"
                         className="resize-none"
                         {...field}

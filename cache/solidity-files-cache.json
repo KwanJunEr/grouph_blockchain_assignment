@@ -1,0 +1,113 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\Lock.sol": {
+      "lastModificationDate": 1743605495133,
+      "contentHash": "642fa52ab63153524e2438211810ea7e",
+      "sourceName": "contracts/Lock.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "Lock"
+      ]
+    },
+    "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\medicalPermission.sol": {
+      "lastModificationDate": 1743605920452,
+      "contentHash": "4b7807a1ee932eb74eba3f8ba43c74a8",
+      "sourceName": "contracts/medicalPermission.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "PatientDataAccess"
+      ]
+    },
+    "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\PatientGeneralInfo.sol": {
+      "lastModificationDate": 1743605495150,
+      "contentHash": "a25508040c26c036c1c018cbc2a4be2a",
+      "sourceName": "contracts/PatientGeneralInfo.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "PatientGeneralInfo"
+      ]
+    }
+  }
+}
