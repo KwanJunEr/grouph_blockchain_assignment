@@ -45,7 +45,7 @@ const Dashboard =  () => {
             {/*Introduction*/}
             <div className="flex flex-row justify-between py-2">
               <h1 className="text-2xl font-extrabold tracking-tighter">
-                Welcome, {data.name}
+                Welcome, {data.name} !
               </h1>
               <Button>Edit Profile</Button>
             </div>
