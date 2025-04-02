@@ -5,7 +5,8 @@ const doctorSchema = new Schema(
         name: { type: String, required: true },
         description: { type: String, required: true },
         location: { type: String, required: true },
-        specialty: {type:String, required: true}
+        specialty: {type:String, required: true},
+        address : { type: String, required: true }
     },
     { collection: "doctorData" }
 );
