@@ -51,7 +51,7 @@ export default function VaccinationRecords() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="px-5 py-5 ">
       {/* Header */}
       <h1 className="text-2xl font-bold">Vaccination Records</h1>
       <p className="text-gray-600">View and manage your vaccination history.</p>

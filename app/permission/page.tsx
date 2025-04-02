@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from "antd";
 import { Button } from '@/components/ui/button';
+
 import { ethers } from "ethers";
 
 // Import the ABI - adjust path as needed
@@ -61,6 +62,7 @@ const Permission = () => {
 
     // Sample doctor data from your off-chain database with fabricated wallet addresses
     const doctorData: DoctorData[] = [
+
         {
             _id: ObjectId('67ea7d729695f4a3c5f336b2'),
             name: "Dr. Emily Carter",
@@ -287,14 +289,14 @@ const Permission = () => {
             )
         },
         {
-            title: 'Data Access',
-            dataIndex: 'dataaccess',
-            key: 'dataaccess',
+          title: 'Data Access',
+          dataIndex: 'dataaccess',
+          key: 'dataaccess',
         },
         {
-            title: 'Last Granted Date',
-            dataIndex: 'lastgranteddate',
-            key: 'lastgranteddate',
+          title: 'Last Granted Date',
+          dataIndex: 'lastgranteddate',
+          key: 'lastgranteddate',
         },
         {
             title: 'Action',

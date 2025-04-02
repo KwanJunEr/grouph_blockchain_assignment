@@ -49,10 +49,10 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center">
                 <DropdownMenuItem asChild>
-                  <Link href="//history">Medical Records</Link>
+                  <Link href="/medicalhistory">Medical Records</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/medical-records/vaccinations">Vaccination Records</Link>
+                  <Link href="/vaccinationrecords">Vaccination Records</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
