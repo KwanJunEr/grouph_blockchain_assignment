@@ -287,14 +287,14 @@ const Permission = () => {
             )
         },
         {
-            title: 'Data Access',
-            dataIndex: 'dataaccess',
-            key: 'dataaccess',
+          title: 'Data Access',
+          dataIndex: 'dataaccess',
+          key: 'dataaccess',
         },
         {
-            title: 'Last Granted Date',
-            dataIndex: 'lastgranteddate',
-            key: 'lastgranteddate',
+          title: 'Last Granted Date',
+          dataIndex: 'lastgranteddate',
+          key: 'lastgranteddate',
         },
         {
             title: 'Action',
