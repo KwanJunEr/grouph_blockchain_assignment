@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import { Table } from "antd";
 import { Button } from '@/components/ui/button';
+import { ethers } from "ethers";
+// learn third web interacting with contract and ethers.js
 
 const Permission = () => {
     const [access, setAccess] = useState(false);
