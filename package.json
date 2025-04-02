@@ -19,6 +19,8 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.483.0",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.1",
     "next": "14.2.18",
     "node": "^20.5.1",
     "pino-pretty": "^13.0.0",

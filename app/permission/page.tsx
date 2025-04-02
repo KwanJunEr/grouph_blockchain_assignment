@@ -3,11 +3,16 @@ import React, { useState } from 'react'
 import { Table } from "antd";
 import { Button } from '@/components/ui/button';
 import RevokeAccessModal from '@/components/RevokeAccessModal';
+import GrantAccessModal from '@/components/GrantAccessModal';
 
 const Permission = () => {
     const [open, setopenModal] = useState(false);
+    const [enableopen, setenableopenModal] = useState(false);
     const handleOpen  = ()=>{
         setopenModal(true);
+    }
+    const handleGrantAccessModal = ()=>{
+      setenableopenModal(true);
     }
     const data = [
         {
@@ -18,6 +23,15 @@ const Permission = () => {
           dataaccess: 'Full Access',
           lastgranteddate: '2024-08-20',
           access: true, // Custom field to track access status
+        },
+        {
+          key: '2',
+          doctor: 'Dr. John Doe',
+          hospital: 'City Hospital',
+          permissionstatus: 'Granted',
+          dataaccess: 'Full Access',
+          lastgranteddate: '2024-08-20',
+          access: false, // Custom field to track access status
         },
     ]
     const columns = [
@@ -50,7 +64,7 @@ const Permission = () => {
           title: 'Action',
           key: 'action',
           render: (_: any, record : any) => (
-            <Button onClick={handleOpen}>
+            <Button onClick={record.access ? handleOpen : handleGrantAccessModal}>
               {record.access ? "Revoke Access" : "Grant Access"}
             </Button>
           ),
@@ -67,6 +81,7 @@ const Permission = () => {
             <div className='mt-10'>
                 <Table columns={columns} dataSource={data}/>
                 <RevokeAccessModal open = {open} setOpen = {setopenModal}/>
+                <GrantAccessModal open = {enableopen} setOpen = {setenableopenModal}/>
             </div>
         </div>
     </main>
