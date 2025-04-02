@@ -7,11 +7,6 @@ import { ethers } from "ethers";
 // Import the ABI - adjust path as needed
 import permissionAbi from "@/abijson/permissionabi.json";
 
-// Helper function to simulate MongoDB ObjectId
-function ObjectId(id: string) {
-    return { toString: () => id };
-}
-
 declare global {
   interface Window {
     ethereum?: any;
@@ -20,18 +15,17 @@ declare global {
 
 // Define interfaces for type safety
 interface DoctorData {
-    _id: { toString: () => string };
+    _id: string;
     name: string;
     description: string;
     location: string;
     specialty: string;
-    __v: number;
     address: string;
 }
 
 interface TableDataItem {
     key: string;
-    _id: { toString: () => string };
+    _id: string;
     address: string;
     doctor: string;
     specialty: string;
@@ -49,55 +43,31 @@ interface Ethereum extends ethers.Eip1193Provider {
   // Add other MetaMask-specific methods if needed
 }
 
-
 const Permission = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [account, setAccount] = useState<string | null>(null);
     const [contract, setContract] = useState<ethers.Contract | null>(null);
     const [tableData, setTableData] = useState<TableDataItem[]>([]);
+    const [doctors, setDoctors] = useState<DoctorData[]>([]);
 
     // Contract address - this would be your deployed contract address in production
-    const contractAddress = "0x1234567890123456789012345678901234567890"; // Placeholder
+    const contractAddress = "0x1234567890123456789012345678901234567890"; // Replace with your actual contract address
 
-    // Sample doctor data from your off-chain database with fabricated wallet addresses
-    const doctorData: DoctorData[] = [
-        {
-            _id: ObjectId('67ea7d729695f4a3c5f336b2'),
-            name: "Dr. Emily Carter",
-            description: "Dr. Carter is a highly skilled cardiologist specializing in the diagno...",
-            location: "City Health Clinic, New York",
-            specialty: "Cardiologist",
-            __v: 0,
-            address: "0xd0c10000000000000000000000000000000000005" // Fabricated address
-        },
-        {
-            _id: ObjectId('67ea7d729695f4a3c5f336b3'),
-            name: "Dr. James Wilson",
-            description: "Dr. Wilson is an experienced neurologist with expertise in...",
-            location: "Metro Neurology Center, Boston",
-            specialty: "Neurologist",
-            __v: 0,
-            address: "0xd0c20000000000000000000000000000000000006" // Fabricated address
-        },
-        {
-            _id: ObjectId('67ea7d729695f4a3c5f336b4'),
-            name: "Dr. Sarah Johnson",
-            description: "Dr. Johnson specializes in pediatric care with over 10 years...",
-            location: "Children's Medical Center, Chicago",
-            specialty: "Pediatrician",
-            __v: 0,
-            address: "0xd0c30000000000000000000000000000000000007" // Fabricated address
-        },
-        {
-            _id: ObjectId('67ea7d729695f4a3c5f336b5'),
-            name: "Dr. Michael Lee",
-            description: "Dr. Lee is a board-certified dermatologist focusing on...",
-            location: "Skin Health Institute, Los Angeles",
-            specialty: "Dermatologist",
-            __v: 0,
-            address: "0xd0c40000000000000000000000000000000000008" // Fabricated address
+    // Fetch doctors from the API
+    const fetchDoctors = async () => {
+        try {
+            const response = await fetch('/api/doctors');
+            if (!response.ok) {
+                throw new Error('Failed to fetch doctors');
+            }
+            const data = await response.json();
+            setDoctors(data.doctors);
+            return data.doctors;
+        } catch (error) {
+            console.error("Error fetching doctors:", error);
+            return [];
         }
-    ];
+    };
 
     // Initialize ethers and connect to MetaMask
     const initializeEthers = async () => {
@@ -126,25 +96,36 @@ const Permission = () => {
               // Now use the cast ethereum object for event listening
               ethereum.on('accountsChanged', (accounts: string[]) => {
                 setAccount(accounts[0]);
-                generatePermissionsData(contractInstance, accounts[0]);
+                generatePermissionsData(contractInstance, accounts[0], doctors);
               });
             
-              // Generate permission data
-              generatePermissionsData(contractInstance, account);
+              // Fetch doctors and then generate permission data
+              const fetchedDoctors = await fetchDoctors();
+              generatePermissionsData(contractInstance, account, fetchedDoctors);
+            } else {
+              // If MetaMask is not available, still fetch doctors for simulation
+              const fetchedDoctors = await fetchDoctors();
+              generatePermissionsData(null, null, fetchedDoctors);
             }
         } catch (error) {
             console.error("Error initializing ethers:", error);
             
-            // Even if there's an error, show simulated data
-            generatePermissionsData();
+            // Even if there's an error, fetch and show data in simulation mode
+            const fetchedDoctors = await fetchDoctors();
+            generatePermissionsData(null, null, fetchedDoctors);
         }
     };
 
     // Generate permission data - handles both real and simulated scenarios
-    const generatePermissionsData = async (contractInstance: ethers.Contract | null = null, patientAddress: string | null = null) => {
+    const generatePermissionsData = async (
+        contractInstance: ethers.Contract | null = null, 
+        patientAddress: string | null = null,
+        doctorList: DoctorData[] = []
+    ) => {
         const permissionData: TableDataItem[] = [];
+        const doctorsToUse = doctorList.length > 0 ? doctorList : doctors;
 
-        for (const doctor of doctorData) {
+        for (const doctor of doctorsToUse) {
             let hasAccess = false;
             
             // Try to get real access status if contract and patient address are available
@@ -169,7 +150,7 @@ const Permission = () => {
             
             permissionData.push({
                 key: doctor._id.toString(),
-                _id: doctor._id,
+                _id: doctor._id.toString(),
                 address: doctor.address,
                 doctor: doctor.name,
                 specialty: doctor.specialty,
@@ -209,7 +190,7 @@ const Permission = () => {
                     console.log(`Successfully ${currentAccess ? 'revoked' : 'granted'} access for doctor: ${doctorAddress}`);
                     
                     // After transaction completes, refresh permissions data
-                    await generatePermissionsData(contract, account);
+                    await generatePermissionsData(contract, account, doctors);
                     return;
                 } catch (err) {
                     console.error("Contract interaction failed:", err);
