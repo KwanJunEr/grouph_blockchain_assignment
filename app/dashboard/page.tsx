@@ -10,6 +10,7 @@ import ManageAccessCard from "@/components/ManageAccessCard";
 import { Calendar } from "@/components/Calendar";
 import DetailItem from "@/components/DetailItem";
 import ListDetailItem from "@/components/ListDetailItem";
+import ProfileModalForm from "@/components/EditProfileModal";
 
 const Dashboard =  () => {
 //   if (!(await isLoggedIn())) {
@@ -33,9 +34,6 @@ const Dashboard =  () => {
     }
   )
 
-  const handleEditProfileOpenModal = ()=>{
-    setOpenModal(true);
-  }
   return (
     <main className="px-5 py-5 min-h-screen">
       <div className="flex flex-row gap-5">
@@ -47,7 +45,8 @@ const Dashboard =  () => {
               <h1 className="text-2xl font-extrabold tracking-tighter">
                 Welcome, {data.name} !
               </h1>
-              <Button>Edit Profile</Button>
+              <Button onClick={()=>setOpenModal(true)}>Edit Profile</Button>
+              <ProfileModalForm open = {open} setOpen = {setOpenModal}/>
             </div>
             <hr className="my-2 h-3 font-bold w-full" />
             {/*User Profile*/}

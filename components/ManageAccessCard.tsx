@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Users, Shield, UserPlus, Settings } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
+import Link from "next/link"
 
 const ManageAccessCard = () => {
   return (
@@ -16,10 +17,12 @@ const ManageAccessCard = () => {
             <Shield className="h-5 w-5 text-emerald-500" />
             <CardTitle>Shared Access</CardTitle>
           </div>
+          <Link href={"/permission"}>
           <Button className="gap-1.5">
             <Settings className="h-4 w-4" />
             Manage Permissions
           </Button>
+          </Link>
         </div>
         <CardDescription>Control who has access to your account and what they can do</CardDescription>
       </CardHeader>
