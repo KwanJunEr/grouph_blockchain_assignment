@@ -1,13 +1,86 @@
 "use client";
-import React, { useState } from "react";
+import { ethers } from "ethers";
+import { getMedicalRecordFromChain } from "@/lib/MedicalHistoryInteract";
+import React, { useState, useEffect} from "react";
 import { Table } from "antd";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import MedicalRecordModal from "@/components/AddMedicalHistory";
 
 const MedicalHistory = () => {
-  const [data, setData] = useState(false);
+ 
   const [open, setOpen] = useState(false);
+  const [listofdata, setListOfData] = useState<any[]>([]); // State for list of data
+  const [loading, setLoading] = useState(false);
+
+   useEffect(() => {
+      const fetchRecords = async () => {
+        setLoading(true);
+        try{
+          const userAddress = localStorage.getItem("userAddress");
+  
+          if (!userAddress) {
+            console.error("User crypto wallet address not found in localStorage");
+            return;
+          }
+          // Check if MetaMask is installed and get accounts
+          if (!window.ethereum) {
+            console.error("MetaMask is not installed!");
+            return;
+          }
+          await window.ethereum.request({ method: "eth_requestAccounts" });
+    
+          // Fix: Correct provider initialization
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const hashes = await getMedicalRecordFromChain(provider, userAddress);
+          console.log("The obtained hashes", hashes);
+     
+          if(hashes.length === 0){
+            console.log("No document hashes found.");
+            setLoading(false);
+            return;
+          }
+  
+          const documentData = await Promise.all(
+              hashes.map(async (hash: any) => {
+              try {
+                console.log(hash)
+                const response = await fetch(`/api/medicalrecord?documentHash=${hash}`);
+                console.log("Response");
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("ReceivedData",data);
+                setListOfData((prevData) => {
+                  if (!prevData.some(item => item.documentHash === data.documentHash)) {
+                    return [...prevData, data];
+                  }
+                  return prevData;
+                });
+            
+              } catch (error) {
+                console.error("Error fetching document for hash:", hash, error);
+              }
+            })
+          );
+          console.log("Fetched Document Data:", listofdata);
+    
+          
+        }catch(error){
+          console.log("Can't find anything");
+          console.error("Error fetching records:", error);
+        }
+        finally {
+          setLoading(false);
+        }
+      };
+      fetchRecords();
+    },[]);
+
+
+
+
   const columns = [
     {
       title: "Visited Date",
@@ -91,7 +164,7 @@ const MedicalHistory = () => {
         </div>
         <hr className="my-1 w-full h-6 font-bold" />
         <div className="mt-2">
-          <Table columns={columns} />
+          <Table columns={columns} dataSource={listofdata} />
         </div>
       </div>
     </main>
