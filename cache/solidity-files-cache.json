@@ -74,8 +74,8 @@
       ]
     },
     "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\MedicalRecord.sol": {
-      "lastModificationDate": 1743670227245,
-      "contentHash": "92d23a4ccce927712bb42ba865302417",
+      "lastModificationDate": 1743696525691,
+      "contentHash": "ed8f8a3ed55b8e61ccbe939e6932adc3",
       "sourceName": "contracts/MedicalRecord.sol",
       "solcConfig": {
         "version": "0.8.28",

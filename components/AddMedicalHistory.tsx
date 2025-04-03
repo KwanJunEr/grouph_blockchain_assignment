@@ -1,5 +1,7 @@
 "use client";
 
+import {ethers} from "ethers";
+import {storeMedicalRecordOnChain} from "@/lib/MedicalHistoryInteract";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -85,13 +87,25 @@ export default function MedicalRecordModal({open, setOpen}: any) {
             return;
         }
 
-        const documentHash = await sha256(values.name + userAddress);
+        const documentHash = await sha256(values.type + userAddress);
         const requestData = {
             ...values,
             userAddress,
             documentHash,
           };
         console.log("Sending Data:", requestData);
+
+         // Check if MetaMask is installed and get accounts
+         if (!window.ethereum) {
+          console.error("MetaMask is not installed!");
+          return;
+      }
+      
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+         // Fix: Correct provider initialization
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const MResult = await storeMedicalRecordOnChain(provider, userAddress, documentHash);
+        console.log(MResult);
 
         const response = await fetch("/api/medicalrecord",{
             method: "POST",
