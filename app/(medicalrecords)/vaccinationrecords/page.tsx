@@ -11,11 +11,13 @@ import {
   FaMapMarkerAlt,
   FaIdCard,
 } from "react-icons/fa";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { CalendarIcon, MapPinIcon, SyringeIcon, StethoscopeIcon, FileTextIcon } from "lucide-react"
 
 export default function VaccinationRecords() {
   const [showModal, setShowModal] = useState(false);
-  const [data, setData] = useState<{ hash: string; content: string }[]>([]);
-  const [documentHashes, setDocumentHashes] = useState([]);
+  const [listofdata, setListOfData] = useState<any[]>([]); // State for list of data
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchRecords = async () => {
@@ -37,7 +39,8 @@ export default function VaccinationRecords() {
         // Fix: Correct provider initialization
         const provider = new ethers.BrowserProvider(window.ethereum);
         const hashes = await getVaccineProfileFromChain(provider, userAddress);
-        setDocumentHashes(hashes);
+        console.log("The obtained hashes", hashes);
+   
 
         if(hashes.length === 0){
           console.log("No document hashes found.");
@@ -46,8 +49,9 @@ export default function VaccinationRecords() {
         }
 
         const documentData = await Promise.all(
-          hashes.map(async (hash: any) => {
+            hashes.map(async (hash: any) => {
             try {
+              console.log(hash)
               const response = await fetch(`/api/vaccination?documentHash=${hash}`);
               console.log("Response");
               if (!response.ok) {
@@ -55,16 +59,20 @@ export default function VaccinationRecords() {
               }
               const data = await response.json();
               console.log(data);
-              return { hash, content: data.content };
+              setListOfData((prevData) => {
+                if (!prevData.some(item => item.documentHash === data.documentHash)) {
+                  return [...prevData, data];
+                }
+                return prevData;
+              });
+          
             } catch (error) {
               console.error("Error fetching document for hash:", hash, error);
-              return { hash, content: "Error loading document" };
             }
           })
         );
-        console.log("Fetched Document Data:", documentData);
-        setData(documentData);
-        console.log(data);
+        console.log("Fetched Document Data:", listofdata);
+  
         
       }catch(error){
         console.log("Can't find anything");
@@ -76,6 +84,8 @@ export default function VaccinationRecords() {
     };
     fetchRecords();
   },[]);
+
+
 
   // const openModal = (vaccine) => {
   //   setSelectedVaccine(vaccine);
@@ -99,56 +109,62 @@ export default function VaccinationRecords() {
           <VaccineForm open={showModal} setOpen={setShowModal} />
         </div>
       </div>
-
-      {/* Filters & Search */}
-      {/* <div className="mt-4 flex gap-4 items-center">
-        <div className="relative flex-1">
-          <FaSearch className="absolute left-3 top-3 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search for a vaccine..."
-            className="border p-2 pl-10 rounded-lg w-full"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700 transition-colors">
-          <FaSearch className="mr-2" /> Search
-        </button>
-      </div> */}
-  
-      {/* Vaccination Cards */}
-      {/* <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vaccinations.map((vaccine) => (
-            <div
-              key={vaccine.id}
-              className={`border-2 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow`}
-            >
-              <div className="flex justify-between items-start">
-                <p className="text-sm font-medium bg-white px-2 py-1 rounded-full inline-flex items-center">
-                  <FaIdCard className="mr-1 text-gray-500" /> {vaccine.id}
-                </p>
-              </div>
-              <h3 className="text-xl font-bold mt-3">{vaccine.name}</h3>
-              <div className="mt-4 space-y-2">
-                <p className="text-sm text-gray-600 flex items-center">
-                  <FaCalendarAlt className="mr-2 text-gray-500" />{" "}
-                  {vaccine.date}
-                </p>
-                <p className="text-sm text-gray-600 flex items-center">
-                  <FaMapMarkerAlt className="mr-2 text-gray-500" />{" "}
-                  {vaccine.location}
-                </p>
-              </div>
-              <button
-                //onClick={() => openModal()}
-                className="mt-5 bg-blue-600 text-white py-2 w-full rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                View Vaccination Certificate
-              </button>
-            </div>
-          ))}
-      </div> */}
+      <hr className="h-4 font-bold my-4"/>
+      <div className="my-4 flex gap-4 items-center">
+      {listofdata.length === 0 ? (
+          <div>No vaccination records available.</div>
+        ) : (
+          listofdata.map((item, index) => {
+            return (
+              <Card key={index} className="flex-1 min-w-[300px] max-w-[400px] hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-2">
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-xl">{item.name || "Unknown"}</CardTitle>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      Verified
+                    </Badge>
+                  </div>
+                  <CardDescription>Vaccine Record #{index + 1}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <SyringeIcon className="h-4 w-4 text-primary" />
+                  <span className="font-medium">Vaccine:</span>
+                  <span className="text-muted-foreground">{item.vaccineName || "N/A"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4 text-primary" />
+                  <span className="font-medium">Date:</span>
+                  <span className="text-muted-foreground">{item.date || "N/A"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPinIcon className="h-4 w-4 text-primary" />
+                  <span className="font-medium">Location:</span>
+                  <span className="text-muted-foreground">{item.location || "N/A"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <StethoscopeIcon className="h-4 w-4 text-primary" />
+                  <span className="font-medium">Doctor:</span>
+                  <span className="text-muted-foreground">{item.administeringDoctor || "N/A"}</span>
+                </div>
+               
+                  <div className="flex items-start gap-2">
+                    <FileTextIcon className="h-4 w-4 text-primary mt-0.5" />
+                    <div>
+                      <span className="font-medium">Notes:</span>
+                      <p className="text-muted-foreground text-sm mt-1">{item.notes}</p>
+                    </div>
+                  </div>
+                
+              </CardContent>
+              <CardFooter className="pt-0">
+                <p className="text-xs text-muted-foreground truncate w-full">Hash: {item.documentHash}...</p>
+              </CardFooter>
+              </Card>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }

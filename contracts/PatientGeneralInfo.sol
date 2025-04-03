@@ -1,23 +1,19 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
 
-contract PatientGeneralInfo{
-    struct Profile{
-        string documentHash;
-        address userAddress;
+contract PatientGeneralInfo {
+
+    // Mapping of user address to their medical record (could be a document hash or record ID)
+    mapping(address => string) public patientGeneralInfo;
+
+    // Store Medical Record Data: user address and corresponding medical record
+    function storePatientGeneralInfo(address userAddress, string memory recordHash) public {
+        patientGeneralInfo[userAddress] = recordHash;
     }
 
-    mapping(string => Profile) public profiles;
-
-     // Store Profile Data
-    function storePatientProfile(string memory documentHash, address userAddress) public {
-        profiles[documentHash] = Profile(documentHash, userAddress);
+    // Retrieve Medical Record Data: return the medical record associated with the user address
+    function getPatientGeneralInfo(address userAddress) public view returns (string memory) {
+        return patientGeneralInfo[userAddress];
     }
-
-    // Retrieve Profile Data
-    function getPatientProfile(string memory documentHash) public view returns (string memory, address) {
-        Profile memory profile = profiles[documentHash];
-        return (profile.documentHash, profile.userAddress);
-    }
-    
 }
+
