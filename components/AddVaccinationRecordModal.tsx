@@ -1,4 +1,6 @@
 "use client";
+import { ethers } from "ethers";
+import {storeVaccineRecordOnChain} from "@/lib/VaccineRecordInteract"
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -82,6 +84,22 @@ export default function VaccineForm({ open, setOpen }: any) {
             userAddress,
             documentHash,
           };
+
+         // Check if MetaMask is installed and get accounts
+        if (!window.ethereum) {
+            console.error("MetaMask is not installed!");
+            return;
+        }
+        
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        
+        // Fix: Correct provider initialization
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        //const signer = await provider.getSigner(); // Need to await this
+
+         // Here, call the function to store the profile on-chain
+        const txResult = await storeVaccineRecordOnChain(provider, userAddress, documentHash);
+        console.log(txResult);
         console.log("Sending Data:", requestData);
 
         const response = await fetch("/api/vaccination",{

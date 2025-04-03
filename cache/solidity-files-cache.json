@@ -38,8 +38,8 @@
       ]
     },
     "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\PatientGeneralInfo.sol": {
-      "lastModificationDate": 1743613533477,
-      "contentHash": "39c9e321ea61632dd851726354dfbb7f",
+      "lastModificationDate": 1743672012640,
+      "contentHash": "5d849927ce19ebfa6984a8f68ea51120",
       "sourceName": "contracts/PatientGeneralInfo.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -110,8 +110,8 @@
       ]
     },
     "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\VaccinationRecord.sol": {
-      "lastModificationDate": 1743670803440,
-      "contentHash": "bb17a5c3fdb049384cb3e94d1fd767c6",
+      "lastModificationDate": 1743672035134,
+      "contentHash": "4dbd244b0e8ecd2b8314ae645ba0939d",
       "sourceName": "contracts/VaccinationRecord.sol",
       "solcConfig": {
         "version": "0.8.28",

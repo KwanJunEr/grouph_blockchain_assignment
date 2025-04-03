@@ -10,12 +10,12 @@ contract PatientGeneralInfo{
     mapping(string => Profile) public profiles;
 
      // Store Profile Data
-    function storeProfile(string memory documentHash, address userAddress) public {
+    function storePatientProfile(string memory documentHash, address userAddress) public {
         profiles[documentHash] = Profile(documentHash, userAddress);
     }
 
     // Retrieve Profile Data
-    function getProfile(string memory documentHash) public view returns (string memory, address) {
+    function getPatientProfile(string memory documentHash) public view returns (string memory, address) {
         Profile memory profile = profiles[documentHash];
         return (profile.documentHash, profile.userAddress);
     }

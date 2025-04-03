@@ -7,12 +7,12 @@ contract VaccinationRecord {
     mapping(address => string) public profiles;
 
     // Store Profile Data: user address and corresponding documentHash
-    function storeProfile(address userAddress, string memory documentHash) public {
+    function storePatientVaccineProfile(address userAddress, string memory documentHash) public {
         profiles[userAddress] = documentHash;
     }
 
     // Retrieve Profile Data: return documentHash by user address
-    function getProfile(address userAddress) public view returns (string memory) {
+    function getPatientVaccineProfile(address userAddress) public view returns (string memory) {
         return profiles[userAddress];
     }
 }
