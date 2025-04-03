@@ -1,4 +1,4 @@
-import connectMongoDB from "@/lib/mongodb.js";
+import connectMongoDB from "@/lib/mongodbc.js";
 import doctorData from "@/models/doctorData";
 import { NextResponse } from "next/server";
 
