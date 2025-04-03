@@ -38,8 +38,8 @@
       ]
     },
     "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\PatientGeneralInfo.sol": {
-      "lastModificationDate": 1743672012640,
-      "contentHash": "5d849927ce19ebfa6984a8f68ea51120",
+      "lastModificationDate": 1743695663946,
+      "contentHash": "ee19369a4ee6f0821162c3946de24c4c",
       "sourceName": "contracts/PatientGeneralInfo.sol",
       "solcConfig": {
         "version": "0.8.28",
