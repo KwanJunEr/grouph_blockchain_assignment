@@ -88,10 +88,9 @@ export default function ProfileModalForm({ open, setOpen }: any) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="min-w-[600px] max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Contact Us</DialogTitle>
+          <DialogTitle>Update Profile</DialogTitle>
           <DialogDescription>
-            Fill out this form to send us a message. We'll get back to you as
-            soon as possible.
+            Fill out this form to update your profile
           </DialogDescription>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto p-2">

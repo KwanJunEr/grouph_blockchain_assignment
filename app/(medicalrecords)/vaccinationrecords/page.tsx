@@ -1,7 +1,14 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { FaSearch, FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaIdCard } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaIdCard,
+} from "react-icons/fa";
 
 const vaccinations = [
   {
@@ -53,11 +60,21 @@ export default function VaccinationRecords() {
   return (
     <div className="px-5 py-5 ">
       {/* Header */}
-      <h1 className="text-2xl font-bold">Vaccination Records</h1>
-      <p className="text-gray-600">View and manage your vaccination history.</p>
+      <div className="flex flex-row justify-between">
+        <div>
+        <h1 className="text-2xl font-bold">Vaccination Records</h1>
+        <p className="text-gray-600">
+          View and manage your vaccination history.
+        </p>
+        </div>
+        <div>
+          <Button variant="default">Record Vaccination</Button>
+        </div>
+       
+      </div>
 
       {/* Filters & Search */}
-      <div className="mt-4 flex gap-4 items-center">
+      {/* <div className="mt-4 flex gap-4 items-center">
         <div className="relative flex-1">
           <FaSearch className="absolute left-3 top-3 text-gray-400" />
           <input
@@ -71,7 +88,7 @@ export default function VaccinationRecords() {
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700 transition-colors">
           <FaSearch className="mr-2" /> Search
         </button>
-      </div>
+      </div> */}
 
       {/* Vaccination Cards */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -92,10 +109,12 @@ export default function VaccinationRecords() {
               <h3 className="text-xl font-bold mt-3">{vaccine.name}</h3>
               <div className="mt-4 space-y-2">
                 <p className="text-sm text-gray-600 flex items-center">
-                  <FaCalendarAlt className="mr-2 text-gray-500" /> {vaccine.date}
+                  <FaCalendarAlt className="mr-2 text-gray-500" />{" "}
+                  {vaccine.date}
                 </p>
                 <p className="text-sm text-gray-600 flex items-center">
-                  <FaMapMarkerAlt className="mr-2 text-gray-500" /> {vaccine.location}
+                  <FaMapMarkerAlt className="mr-2 text-gray-500" />{" "}
+                  {vaccine.location}
                 </p>
               </div>
               <button
@@ -118,7 +137,7 @@ export default function VaccinationRecords() {
             >
               <FaTimes size={20} />
             </button>
-            
+
             <div className="flex gap-4 mt-6">
               <button
                 onClick={closeModal}
