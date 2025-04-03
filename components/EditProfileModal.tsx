@@ -1,5 +1,6 @@
 "use client";
 
+import { sha256 } from "crypto-hash";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -59,18 +60,21 @@ export default function ProfileModalForm({ open, setOpen }: any) {
       return;
     }
 
-    const profileData = {
-      ...data, // other profile fields
-      userAddress, // add user address to profile data
-    };
-    console.log("Profile Data", profileData);
+    const documentHash = await sha256(data.name + userAddress);
+    const requestData = {
+        ...data,
+        userAddress,
+        documentHash,
+      };
+
+    console.log("Profile Data", requestData);
     try {
       const res = await fetch("/api/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(profileData),
+        body: JSON.stringify(requestData),
       });
       const result = await res.json();
       if (result.success) {
@@ -78,6 +82,8 @@ export default function ProfileModalForm({ open, setOpen }: any) {
       } else {
         console.error("Error:", result.message);
       }
+      setOpen(false);
+      form.reset();
     } catch (error) {
       alert("Error submitting profile.");
       console.error(error);
@@ -88,10 +94,9 @@ export default function ProfileModalForm({ open, setOpen }: any) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="min-w-[600px] max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Contact Us</DialogTitle>
+          <DialogTitle>Update Profile</DialogTitle>
           <DialogDescription>
-            Fill out this form to send us a message. We'll get back to you as
-            soon as possible.
+            Fill out this form to update your profile
           </DialogDescription>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto p-2">

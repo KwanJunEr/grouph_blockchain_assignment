@@ -1,63 +1,107 @@
 "use client";
-
-import { useState } from "react";
-import { FaSearch, FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaIdCard } from "react-icons/fa";
-
-const vaccinations = [
-  {
-    id: "VC-001",
-    name: "COVID-19 Vaccine (Pfizer)",
-    date: "10/01/2024",
-    location: "City Health Clinic",
-  },
-  {
-    id: "VC-003",
-    name: "HPV Vaccine (Gardasil)",
-    date: "20/01/2024",
-    location: "Women's Wellness Clinic",
-  },
-  {
-    id: "VC-005",
-    name: "HPV Vaccine (Gardasil)",
-    date: "30/01/2024",
-    location: "Women's Wellness Clinic",
-  },
-  {
-    id: "VC-005",
-    name: "Hepatitis B Vaccine",
-    date: "05/02/2024",
-    location: "Sunshine Clinic",
-  },
-  {
-    id: "VC-005",
-    name: "Meningococcal Vaccine",
-    date: "30/01/2024",
-    location: "Women's Wellness Clinic",
-  },
-];
+import { ethers } from "ethers";
+import {getVaccineProfileFromChain} from "@/lib/VaccineRecordInteract"
+import VaccineForm from "@/components/AddVaccinationRecordModal";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import {
+  FaSearch,
+  FaTimes,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaIdCard,
+} from "react-icons/fa";
 
 export default function VaccinationRecords() {
-  const [search, setSearch] = useState("");
-  const [selectedVaccine, setSelectedVaccine] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState<{ hash: string; content: string }[]>([]);
+  const [documentHashes, setDocumentHashes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchRecords = async () => {
+      setLoading(true);
+      try{
+        const userAddress = localStorage.getItem("userAddress");
+
+        if (!userAddress) {
+          console.error("User crypto wallet address not found in localStorage");
+          return;
+        }
+        // Check if MetaMask is installed and get accounts
+        if (!window.ethereum) {
+          console.error("MetaMask is not installed!");
+          return;
+        }
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+  
+        // Fix: Correct provider initialization
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const hashes = await getVaccineProfileFromChain(provider, userAddress);
+        setDocumentHashes(hashes);
+
+        if(hashes.length === 0){
+          console.log("No document hashes found.");
+          setLoading(false);
+          return;
+        }
+
+        const documentData = await Promise.all(
+          hashes.map(async (hash: any) => {
+            try {
+              const response = await fetch(`/api/vaccination?documentHash=${hash}`);
+              console.log("Response");
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              const data = await response.json();
+              console.log(data);
+              return { hash, content: data.content };
+            } catch (error) {
+              console.error("Error fetching document for hash:", hash, error);
+              return { hash, content: "Error loading document" };
+            }
+          })
+        );
+        console.log("Fetched Document Data:", documentData);
+        setData(documentData);
+        console.log(data);
+        
+      }catch(error){
+        console.log("Can't find anything");
+        console.error("Error fetching records:", error);
+      }
+      finally {
+        setLoading(false);
+      }
+    };
+    fetchRecords();
+  },[]);
 
   // const openModal = (vaccine) => {
   //   setSelectedVaccine(vaccine);
   //   setShowModal(true);
   // };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   return (
-    <div className="px-5 py-5 ">
+    <div className="px-5 py-5 min-h-screen">
       {/* Header */}
-      <h1 className="text-2xl font-bold">Vaccination Records</h1>
-      <p className="text-gray-600">View and manage your vaccination history.</p>
+      <div className="flex flex-row justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Vaccination Records</h1>
+          <p className="text-gray-600">
+            View and manage your vaccination history.
+          </p>
+        </div>
+        <div>
+          <Button variant="default" onClick={() => setShowModal(true)}>
+            Record Vaccination
+          </Button>
+          <VaccineForm open={showModal} setOpen={setShowModal} />
+        </div>
+      </div>
 
       {/* Filters & Search */}
-      <div className="mt-4 flex gap-4 items-center">
+      {/* <div className="mt-4 flex gap-4 items-center">
         <div className="relative flex-1">
           <FaSearch className="absolute left-3 top-3 text-gray-400" />
           <input
@@ -71,15 +115,11 @@ export default function VaccinationRecords() {
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700 transition-colors">
           <FaSearch className="mr-2" /> Search
         </button>
-      </div>
-
+      </div> */}
+  
       {/* Vaccination Cards */}
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vaccinations
-          .filter((vaccine) =>
-            vaccine.name.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((vaccine) => (
+      {/* <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {vaccinations.map((vaccine) => (
             <div
               key={vaccine.id}
               className={`border-2 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow`}
@@ -92,10 +132,12 @@ export default function VaccinationRecords() {
               <h3 className="text-xl font-bold mt-3">{vaccine.name}</h3>
               <div className="mt-4 space-y-2">
                 <p className="text-sm text-gray-600 flex items-center">
-                  <FaCalendarAlt className="mr-2 text-gray-500" /> {vaccine.date}
+                  <FaCalendarAlt className="mr-2 text-gray-500" />{" "}
+                  {vaccine.date}
                 </p>
                 <p className="text-sm text-gray-600 flex items-center">
-                  <FaMapMarkerAlt className="mr-2 text-gray-500" /> {vaccine.location}
+                  <FaMapMarkerAlt className="mr-2 text-gray-500" />{" "}
+                  {vaccine.location}
                 </p>
               </div>
               <button
@@ -106,33 +148,7 @@ export default function VaccinationRecords() {
               </button>
             </div>
           ))}
-      </div>
-
-      {/* Modal */}
-      {showModal && selectedVaccine && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-lg w-full p-6 relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-            >
-              <FaTimes size={20} />
-            </button>
-            
-            <div className="flex gap-4 mt-6">
-              <button
-                onClick={closeModal}
-                className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
-              >
-                Close
-              </button>
-              <button className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                Download PDF
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div> */}
     </div>
   );
 }
