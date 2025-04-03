@@ -1,8 +1,9 @@
 "use client";
-
+import { ethers } from "ethers";
+import {getVaccineProfileFromChain} from "@/lib/VaccineRecordInteract"
 import VaccineForm from "@/components/AddVaccinationRecordModal";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaSearch,
   FaTimes,
@@ -11,64 +12,92 @@ import {
   FaIdCard,
 } from "react-icons/fa";
 
-const vaccinations = [
-  {
-    id: "VC-001",
-    name: "COVID-19 Vaccine (Pfizer)",
-    date: "10/01/2024",
-    location: "City Health Clinic",
-  },
-  {
-    id: "VC-003",
-    name: "HPV Vaccine (Gardasil)",
-    date: "20/01/2024",
-    location: "Women's Wellness Clinic",
-  },
-  {
-    id: "VC-005",
-    name: "HPV Vaccine (Gardasil)",
-    date: "30/01/2024",
-    location: "Women's Wellness Clinic",
-  },
-  {
-    id: "VC-005",
-    name: "Hepatitis B Vaccine",
-    date: "05/02/2024",
-    location: "Sunshine Clinic",
-  },
-  {
-    id: "VC-005",
-    name: "Meningococcal Vaccine",
-    date: "30/01/2024",
-    location: "Women's Wellness Clinic",
-  },
-];
-
 export default function VaccinationRecords() {
-
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState<{ hash: string; content: string }[]>([]);
+  const [documentHashes, setDocumentHashes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchRecords = async () => {
+      setLoading(true);
+      try{
+        const userAddress = localStorage.getItem("userAddress");
+
+        if (!userAddress) {
+          console.error("User crypto wallet address not found in localStorage");
+          return;
+        }
+        // Check if MetaMask is installed and get accounts
+        if (!window.ethereum) {
+          console.error("MetaMask is not installed!");
+          return;
+        }
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+  
+        // Fix: Correct provider initialization
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const hashes = await getVaccineProfileFromChain(provider, userAddress);
+        setDocumentHashes(hashes);
+
+        if(hashes.length === 0){
+          console.log("No document hashes found.");
+          setLoading(false);
+          return;
+        }
+
+        const documentData = await Promise.all(
+          hashes.map(async (hash: any) => {
+            try {
+              const response = await fetch(`/api/vaccination?documentHash=${hash}`);
+              console.log("Response");
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              const data = await response.json();
+              console.log(data);
+              return { hash, content: data.content };
+            } catch (error) {
+              console.error("Error fetching document for hash:", hash, error);
+              return { hash, content: "Error loading document" };
+            }
+          })
+        );
+        console.log("Fetched Document Data:", documentData);
+        setData(documentData);
+        console.log(data);
+        
+      }catch(error){
+        console.log("Can't find anything");
+        console.error("Error fetching records:", error);
+      }
+      finally {
+        setLoading(false);
+      }
+    };
+    fetchRecords();
+  },[]);
 
   // const openModal = (vaccine) => {
   //   setSelectedVaccine(vaccine);
   //   setShowModal(true);
   // };
 
- 
   return (
-    <div className="px-5 py-5 ">
+    <div className="px-5 py-5 min-h-screen">
       {/* Header */}
       <div className="flex flex-row justify-between">
         <div>
-        <h1 className="text-2xl font-bold">Vaccination Records</h1>
-        <p className="text-gray-600">
-          View and manage your vaccination history.
-        </p>
+          <h1 className="text-2xl font-bold">Vaccination Records</h1>
+          <p className="text-gray-600">
+            View and manage your vaccination history.
+          </p>
         </div>
         <div>
-          <Button variant="default" onClick={()=>setShowModal(true)}>Record Vaccination</Button>
-          <VaccineForm open = {showModal} setOpen = {setShowModal}/>
+          <Button variant="default" onClick={() => setShowModal(true)}>
+            Record Vaccination
+          </Button>
+          <VaccineForm open={showModal} setOpen={setShowModal} />
         </div>
-       
       </div>
 
       {/* Filters & Search */}
@@ -87,9 +116,9 @@ export default function VaccinationRecords() {
           <FaSearch className="mr-2" /> Search
         </button>
       </div> */}
-
+  
       {/* Vaccination Cards */}
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {vaccinations.map((vaccine) => (
             <div
               key={vaccine.id}
@@ -119,7 +148,7 @@ export default function VaccinationRecords() {
               </button>
             </div>
           ))}
-      </div>
+      </div> */}
     </div>
   );
 }

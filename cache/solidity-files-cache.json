@@ -110,8 +110,8 @@
       ]
     },
     "D:\\APU University Course\\Degree Year 3 Course\\blockchain\\grouph_blockchain_assignment\\contracts\\VaccinationRecord.sol": {
-      "lastModificationDate": 1743672035134,
-      "contentHash": "4dbd244b0e8ecd2b8314ae645ba0939d",
+      "lastModificationDate": 1743679453745,
+      "contentHash": "bc917852a102072fed72db867cba5c96",
       "sourceName": "contracts/VaccinationRecord.sol",
       "solcConfig": {
         "version": "0.8.28",

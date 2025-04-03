@@ -78,7 +78,7 @@ export default function VaccineForm({ open, setOpen }: any) {
             return;
         }
 
-        const documentHash = await sha256(values.name + userAddress);
+        const documentHash = await sha256(values.vaccineName + userAddress);
         const requestData = {
             ...values,
             userAddress,
