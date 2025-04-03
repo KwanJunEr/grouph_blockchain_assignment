@@ -76,9 +76,6 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link href="/tools/claims">Insurance Claims</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/permission">Medical Records permission</Link>
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
