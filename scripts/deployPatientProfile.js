@@ -21,7 +21,7 @@ async function main() {
     
     // Get the deployed contract address
     const patientGeneralInfoAddress = await patientGeneralInfo.getAddress();
-    console.log("VaccineRecord contract deployed to:", patientGeneralInfoAddress);
+    console.log("PatientProfile contract deployed to:", patientGeneralInfoAddress);
   } catch (error) {
     console.error("Error during deployment:");
     console.error(error);
