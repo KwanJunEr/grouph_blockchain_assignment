@@ -9,7 +9,7 @@ import permissionAbi from "@/abijson/permissionabi.json";
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum: any; // Match the type declared in web3modal
   }
 }
 

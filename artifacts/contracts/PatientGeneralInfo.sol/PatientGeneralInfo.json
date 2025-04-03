@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "PatientGeneralInfo",
+  "sourceName": "contracts/PatientGeneralInfo.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212200a32a29ae0b4136c9ec1f4ccc18b7fcb03aa29f06351121d4f4a7e65af275c5664736f6c634300081c0033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212200a32a29ae0b4136c9ec1f4ccc18b7fcb03aa29f06351121d4f4a7e65af275c5664736f6c634300081c0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
