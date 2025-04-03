@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-
+import { sha256 } from "crypto-hash";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -67,7 +67,42 @@ export default function VaccineForm({ open, setOpen }: any) {
     },
   });
 
-  function onSubmit(values: any) {
+  async function onSubmit(values: any) {
+    try{
+        const userAddress = localStorage.getItem("userAddress");
+
+        if (!userAddress) {
+            console.error("User crypto wallet address not found in localStorage");
+            return;
+        }
+
+        const documentHash = await sha256(values.name + userAddress);
+        const requestData = {
+            ...values,
+            userAddress,
+            documentHash,
+          };
+        console.log("Sending Data:", requestData);
+
+        const response = await fetch("/api/vaccination",{
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+        })
+
+        const responseData = await response.json();
+        if (!response.ok) {
+            throw new Error(responseData.message || "Failed to create vaccination record");
+          }
+      
+          console.log("Vaccination Record Created Successfully:", responseData);
+          setOpen(false);
+          form.reset();
+    }catch(error){
+        console.error("Error submitting vaccination record:", error);
+    }
     console.log(values);
     setOpen(false);
     form.reset();
@@ -75,9 +110,6 @@ export default function VaccineForm({ open, setOpen }: any) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="default">Record Vaccination</Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Vaccination Record</DialogTitle>

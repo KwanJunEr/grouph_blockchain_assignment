@@ -1,5 +1,6 @@
 "use client";
 
+import VaccineForm from "@/components/AddVaccinationRecordModal";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import {
@@ -44,8 +45,7 @@ const vaccinations = [
 ];
 
 export default function VaccinationRecords() {
-  const [search, setSearch] = useState("");
-  const [selectedVaccine, setSelectedVaccine] = useState(null);
+
   const [showModal, setShowModal] = useState(false);
 
   // const openModal = (vaccine) => {
@@ -53,10 +53,7 @@ export default function VaccinationRecords() {
   //   setShowModal(true);
   // };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
+ 
   return (
     <div className="px-5 py-5 ">
       {/* Header */}
@@ -68,7 +65,8 @@ export default function VaccinationRecords() {
         </p>
         </div>
         <div>
-          <Button variant="default">Record Vaccination</Button>
+          <Button variant="default" onClick={()=>setShowModal(true)}>Record Vaccination</Button>
+          <VaccineForm open = {showModal} setOpen = {setShowModal}/>
         </div>
        
       </div>
@@ -92,11 +90,7 @@ export default function VaccinationRecords() {
 
       {/* Vaccination Cards */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vaccinations
-          .filter((vaccine) =>
-            vaccine.name.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((vaccine) => (
+        {vaccinations.map((vaccine) => (
             <div
               key={vaccine.id}
               className={`border-2 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow`}
@@ -126,32 +120,6 @@ export default function VaccinationRecords() {
             </div>
           ))}
       </div>
-
-      {/* Modal */}
-      {showModal && selectedVaccine && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-lg w-full p-6 relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-            >
-              <FaTimes size={20} />
-            </button>
-
-            <div className="flex gap-4 mt-6">
-              <button
-                onClick={closeModal}
-                className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
-              >
-                Close
-              </button>
-              <button className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                Download PDF
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
