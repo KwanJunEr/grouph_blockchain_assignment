@@ -140,6 +140,9 @@ export default function ProfileModalForm({ open, setOpen }: ProfileModalFormProp
       // Close form and reset on success
       setOpen(false);
       form.reset();
+
+      // Refresh the page
+      window.location.reload();
       
     } catch (error: any) {
       console.error("Error submitting profile:", error);
