@@ -42,3 +42,32 @@ export async function POST(req) {
     return NextResponse.json({ message: "No Data Created", error: error.message }, { status: 500 });
   }
 }
+
+export async function GET(req) {
+  try {
+    // Extract document hash from the URL query parameters
+    const { searchParams } = new URL(req.url);
+    const documentHash = searchParams.get('hash');
+    
+    if (!documentHash) {
+      return NextResponse.json({ message: "Document hash is required" }, { status: 400 });
+    }
+    
+    console.log("Looking for document with hash:", documentHash);
+    
+    // Find the patient data by document hash
+    const patientData = await PatientData.findOne({ documentHash });
+    
+    if (!patientData) {
+      return NextResponse.json({ message: "Patient data not found" }, { status: 404 });
+    }
+    
+    console.log("Found patient data:", patientData);
+    
+    // Return the patient data
+    return NextResponse.json({ data: patientData }, { status: 200 });
+  } catch (error) {
+    console.error("Error retrieving patient data:", error);
+    return NextResponse.json({ message: "Error retrieving patient data", error: error.message }, { status: 500 });
+  }
+}
