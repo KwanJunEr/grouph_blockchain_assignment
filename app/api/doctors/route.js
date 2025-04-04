@@ -1,11 +1,11 @@
-import connectMongoDB from "@/lib/mongodbc";
-import doctorData from "@/models/doctorData";
+import DoctorData from "@/models/doctorData";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req) {
   try {
-    await connectMongoDB();
-    const doctors = await doctorData.find({});
+    // Fetch all doctors from the collection
+    const doctors = await DoctorData.find({});
+    
     return NextResponse.json({ doctors }, { status: 200 });
   } catch (error) {
     console.error('Error fetching doctors:', error);
@@ -13,5 +13,7 @@ export async function GET() {
       { error: 'Failed to fetch doctors' },
       { status: 500 }
     );
+  } finally {
+
   }
 }
