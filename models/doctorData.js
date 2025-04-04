@@ -1,4 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
+
+mongoose.connect(process.env.MONGODB_URI);
+console.log(process.env.MONGODB_URI);
+mongoose.Promise = global.Promise;
 
 const doctorSchema = new Schema(
     {
@@ -12,5 +17,5 @@ const doctorSchema = new Schema(
 );
 
 // Only use one method to specify the collection name
-const Doctor = mongoose.models.Doctor || mongoose.model("Doctor", doctorSchema, "doctorData");
-export default Doctor;
+const DoctorData = mongoose.models.DoctorData || mongoose.model('DoctorData', doctorSchema);
+export default DoctorData;
