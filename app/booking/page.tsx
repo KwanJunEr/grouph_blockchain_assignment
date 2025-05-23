@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { FaSearch, FaMapMarkerAlt, FaRegCalendarAlt, FaTimes, FaCopy } from 'react-icons/fa';
 import { BsBellFill } from 'react-icons/bs';
 import { format } from 'date-fns';
+import Link from 'next/link';
+import { Router } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 // Types
 interface Doctor {
@@ -27,7 +30,7 @@ const doctors: Doctor[] = [
     id: 1,
     name: "Dr. Emily Carter",
     specialty: "Cardiologist",
-    location: "City Health Clinic, New York",
+    location: "Pantai Hospital, Selangor, Malaysia",
     rating: 4.9,
     image: "/doctors/emily-carter.jpg",
   },
@@ -35,7 +38,7 @@ const doctors: Doctor[] = [
     id: 2,
     name: "Dr. Michael Reynolds",
     specialty: "Nephrologist",
-    location: "City Clinic Centre, New York",
+    location: "Pantai Hospital, Selangor, Malaysia",
     rating: 4.5,
     image: "/doctors/michael-reynolds.jpg",
   },
@@ -43,7 +46,7 @@ const doctors: Doctor[] = [
     id: 3,
     name: "Dr. James Wong",
     specialty: "Dermatologist",
-    location: "Sun Heart Clinic, Los Angeles",
+    location: "Pantai Hospital, Selangor, Malaysia",
     rating: 4.4,
     image: "/doctors/james-wong.jpg",
   },
@@ -51,7 +54,7 @@ const doctors: Doctor[] = [
     id: 4,
     name: "Dr. Priya Sharma",
     specialty: "Neurologist",
-    location: "Pinnacle Wellness Clinic, San Francisco",
+    location: "Pantai Hosital, Selangor, Malaysia",
     rating: 4.7,
     image: "/doctors/priya-sharma.jpg",
   },
@@ -59,7 +62,7 @@ const doctors: Doctor[] = [
     id: 5,
     name: "Dr. Carlos Martinez",
     specialty: "Oncologist",
-    location: "Life Medical Care, Sacramento",
+    location: "Hospital Gembira, Kuala Lumpur, Malaysia",
     rating: 4.9,
     image: "/doctors/carlos-martinez.jpg",
   },
@@ -76,6 +79,7 @@ const availableTimeSlots: TimeSlot[] = [
 ];
 
 export default function BookConsultation() {
+  const router = useRouter();
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -111,6 +115,7 @@ export default function BookConsultation() {
     // Here you would handle the booking confirmation, possibly making an API call
     alert('Booking confirmed!');
     closeModal();
+    router.push("/booking/receipt")
   };
 
   // Format the date for display
@@ -122,7 +127,7 @@ export default function BookConsultation() {
   const walletAddress = "0x1234328933847294567";
   const contractAddress = "0x742d35Cc6634C0532925a3b844B454e6C8f7e2b5";
   const transactionHash = "0x4a7e2b5c2925a3b844B454e6C8f7e2b5742d35Cc";
-  const totalCost = "150 + 5 gas fee";
+  const totalCost = "120 + 20 gas fee";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -252,9 +257,11 @@ export default function BookConsultation() {
                     </div>
                   </div>
                   <div>
+            
                     <button className="bg-gray-900 text-white text-sm py-1 px-3 rounded hover:bg-gray-800">
                       Book Consultation
                     </button>
+                   
                   </div>
                 </div>
               ))}
@@ -290,9 +297,11 @@ export default function BookConsultation() {
                         ))}
                       </div>
                     </div>
+                    <Link href={"/booking/DocDetails"}>
                     <button className="bg-gray-900 text-white text-sm py-3 px-5 rounded hover:bg-gray-800">
                       View Profile Details
                     </button>
+                    </Link>
                   </div>
                 </div>
 
@@ -440,7 +449,8 @@ export default function BookConsultation() {
                           className="appearance-none w-full border rounded py-2 px-3 pr-8"
                           value={paymentMethod}
                           onChange={(e) => setPaymentMethod(e.target.value)}
-                        >
+                        > 
+                          <option value="RM">RM</option>
                           <option value="ETH">ETH</option>
                           <option value="BTC">BTC</option>
                           <option value="USDC">USDC</option>

@@ -21,7 +21,7 @@ const BookingReceipt: React.FC<BookingReceiptProps> = ({
   dateTime = "19 March 2025, Wednesday 10:00 AM",
   consultationType = "In-Person",
   transactionId = "0x4d7e525c29253b4148454a6d28f7e2b742d30c",
-  amount = "$155 (including app fees)"
+  amount = "RM140 (including app fees)"
 }) => {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -76,7 +76,7 @@ const BookingReceipt: React.FC<BookingReceiptProps> = ({
           </div>
           
           <div className="flex justify-between items-center">
-            <span className="font-semibold">Transaction Details</span>
+            <span className="font-semibold">Booking Confirmation Details Hash</span>
             <div className="flex items-center">
               <span className="text-gray-800 mr-1 text-sm font-mono">{transactionId}</span>
               <FiExternalLink className="text-gray-500 w-4 h-4" />

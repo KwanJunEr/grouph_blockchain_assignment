@@ -25,7 +25,7 @@ export default function DoctorDetails()  {
                   <div className="flex-shrink-0">
                     <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border">
                       <img
-                        src="/api/placeholder/128/128"
+                        src="/femaledoctor.png"
                         alt="Doctor"
                         className="w-full h-full object-cover"
                       />
@@ -47,25 +47,7 @@ export default function DoctorDetails()  {
                 </div>
 
                 {/* Available Slots */}
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold">Available Slots</h3>
-                  <Input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="border p-2 rounded-md mt-2 w-full md:w-auto"
-                  />
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                    {["09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00"].map((slot, index) => (
-                      <Button key={index} variant="outline" className="bg-gray-200 hover:bg-gray-300">
-                        {slot}
-                      </Button>
-                    ))}
-                  </div>
-                  <Button className="mt-4 w-full bg-purple-700 hover:bg-purple-800 text-white">
-                    Book Consultation
-                  </Button>
-                </div>
+                
               </CardContent>
             </Card>
           </div>

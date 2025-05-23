@@ -68,13 +68,16 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center">
                 <DropdownMenuItem asChild>
-                  <Link href="/tools/insurance">Insurance</Link>
+                  <Link href="/booking">Booking</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/medicine">Medicine Verification</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/tools/claims">Insurance Claims</Link>
+                </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                  <Link href="/healthconsult">Health Consult</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
