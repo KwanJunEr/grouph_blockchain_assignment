@@ -70,9 +70,9 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link href="/tools/insurance">Insurance</Link>
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem asChild>
-                  <Link href="/tools/medicine">Medicine</Link>
-                </DropdownMenuItem> */}
+                <DropdownMenuItem asChild>
+                  <Link href="/medicine">Medicine Verification</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/tools/claims">Insurance Claims</Link>
                 </DropdownMenuItem>
